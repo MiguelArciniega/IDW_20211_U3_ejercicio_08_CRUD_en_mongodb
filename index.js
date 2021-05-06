@@ -30,5 +30,58 @@ article.save(function (error) {
     process.exit(1);
   }
   console.log("Creación exitosa");
-  process.exit(0);
+  Article.find({}, function (error, docs) {
+    if (error) {
+      console.log(error);
+      process.exit(1);
+    }
+    console.log("---- Consulta general 1 ----");
+    console.log(docs);
+    Article.update(
+      {
+        _id: "60933ce784755588d85287d3",
+      },
+      {
+        $set: {
+          author: "Miguel Arciniega",
+        },
+      },
+      function (error, docs) {
+        if (error) {
+          console.log(error);
+          process.exit(1);
+        }
+        console.log("---- Actualización ----");
+        console.log(docs);
+        Article.find({}, function (error, docs) {
+          if (error) {
+            console.log(error);
+            process.exit(1);
+          }
+          console.log("---- Consulta general 2 ----");
+          console.log(docs);
+          Article.findByIdAndRemove(
+            { _id: "60933b6054749c524c43c00b" },
+            function (error, docs) {
+              if (error) {
+                console.log(error);
+                process.exit(1);
+              }
+              console.log("---- Eliminación ----");
+              console.log(docs);
+              Article.find({}, function (error, docs) {
+                if (error) {
+                  console.log(error);
+                  process.exit(1);
+                }
+                console.log("---- Consulta general 3 ----");
+                console.log(docs);
+                process.exit(0);
+              });
+            }
+          );
+        });
+      }
+    );
+  });
 });
